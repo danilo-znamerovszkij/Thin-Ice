@@ -6,17 +6,42 @@
         xmlns:local="clr-namespace:Thin_Ice.View"
         mc:Ignorable="d"
         Title="Thin Ice" 
-        Height="600" Width="600" 
-        MinHeight="500" MinWidth="500">
+        ResizeMode="NoResize"
+        Height="550" Width="550">
+    <Window.InputBindings>
+        <KeyBinding Key="Up" Command="{Binding UpKeyPressedCommand}"></KeyBinding>
+        <KeyBinding Key="Right" Command="{Binding RightKeyPressedCommand}"></KeyBinding>
+        <KeyBinding Key="Down" Command="{Binding DownKeyPressedCommand}"></KeyBinding>
+        <KeyBinding Key="Left" Command="{Binding LeftKeyPressedCommand}"></KeyBinding>
+    </Window.InputBindings>
     <Viewbox>
-        <Canvas Background="Black" Name="GameBoard" Width="500" Height="200">
+        <Canvas Background="LightGreen" Name="GameBoard" Width="550" Height="525">
+
+            <Rectangle Width="{Binding GameLogic.Player.WidthPixels, Mode=OneWay}" 
+                       Height="{Binding GameLogic.Player.HeightPixels, Mode=OneWay}" 
+                       >
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="pack://application:,,,/Thin Ice;component/Resources/player.png" />
+                </Rectangle.Fill>
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <TranslateTransform X="{Binding GameLogic.Player.XPosition, Mode=OneWay}" 
+                                            Y="{Binding GameLogic.Player.YPosition, Mode=OneWay}">
+                        </TranslateTransform>
+                        <RotateTransform CenterX="{Binding GameLogic.Player.XPosition, Mode=OneWay}"
+                                         CenterY="{Binding GameLogic.Player.YPosition, Mode=OneWay}"
+                                         Angle="{Binding GameLogic.Player.DirectionOfTravelDegrees, Mode=OneWay}">
+                        </RotateTransform>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
 
             <Grid>
-                
+
             </Grid>
-        
+
         </Canvas>
-        
+
     </Viewbox>
-   
+
 </Window>

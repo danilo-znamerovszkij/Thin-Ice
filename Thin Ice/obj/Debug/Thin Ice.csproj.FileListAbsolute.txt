@@ -16,7 +16,6 @@ C:\Users\Gebruiker\Documents\Thin Ice\Thin Ice\obj\Debug\Thin Ice.pdb
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\bin\Debug\Thin Ice.exe.config
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\bin\Debug\Thin Ice.exe
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\bin\Debug\Thin Ice.pdb
-C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.csprojAssemblyReference.cache
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\View\GameView.g.cs
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\App.g.cs
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice_MarkupCompile.cache
@@ -28,3 +27,4 @@ C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.cspro
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.csproj.CoreCompileInputs.cache
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.exe
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.pdb
+C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.csprojAssemblyReference.cache

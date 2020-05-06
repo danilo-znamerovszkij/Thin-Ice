@@ -16,7 +16,7 @@ namespace Thin_Ice.ViewModel
         public GameViewModel()
         {
             GameLogic = new Game();
-
+            Console.WriteLine("New game");
             UpKeyPressedCommand = new KeyPressedCommand(OnUpKeyPressed);
             RightKeyPressedCommand = new KeyPressedCommand(OnRightKeyPressed);
             DownKeyPressedCommand = new KeyPressedCommand(OnDownKeyPressed);
@@ -65,22 +65,24 @@ namespace Thin_Ice.ViewModel
 
         private void OnUpKeyPressed(object arg)
         {
-          
             //get state
-            //if (GameLogic.getState() == IN_GAME ) GameLogic.ProccessKeyboardEvent(Direction.Up) 
+            if (GameLogic.GetState() == Game.IN_GAME) GameLogic.ProccessKeyboardEvent(Game.DIRECTION_UP);
 
         }
 
         private void OnRightKeyPressed(object arg)
         {
+            if (GameLogic.GetState() == Game.IN_GAME) GameLogic.ProccessKeyboardEvent(Game.DIRECTION_RIGHT);
         }
 
         private void OnDownKeyPressed(object arg)
         {
+            if (GameLogic.GetState() == Game.IN_GAME) GameLogic.ProccessKeyboardEvent(Game.DIRECTION_DOWN);
         }
 
         private void OnLeftKeyPressed(object arg)
         {
+            if (GameLogic.GetState() == Game.IN_GAME) GameLogic.ProccessKeyboardEvent(Game.DIRECTION_LEFT);
         }
 
 

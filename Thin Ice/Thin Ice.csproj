@@ -58,6 +58,9 @@
     <Compile Include="Common\KeyPressedCommand.cs" />
     <Compile Include="Common\Observer.cs" />
     <Compile Include="Model\Game.cs" />
+    <Compile Include="Model\IceBlock.cs" />
+    <Compile Include="Model\Piece.cs" />
+    <Compile Include="Model\Player.cs" />
     <Compile Include="ViewModel\GameViewModel.cs" />
     <Compile Include="View\GameView.xaml.cs">
       <DependentUpon>GameView.xaml</DependentUpon>
@@ -97,6 +100,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\player.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
