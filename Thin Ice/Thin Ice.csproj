@@ -59,6 +59,10 @@
     <Compile Include="Common\Observer.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="Model\IceBlock.cs" />
+    <Compile Include="Model\IceFloor.cs" />
+    <Compile Include="Model\MeltedIce.cs" />
+    <Compile Include="Model\MoneyBag.cs" />
+    <Compile Include="Model\NextLevelDoor.cs" />
     <Compile Include="Model\Piece.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="ViewModel\GameViewModel.cs" />
@@ -102,6 +106,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\player.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\wall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\floor.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

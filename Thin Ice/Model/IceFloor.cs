@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Thin_Ice.Model
 {
-    class IceBlock : Piece
+    class IceFloor : Piece
     {
-        public IceBlock(int x, int y)
+        public IceFloor(int x, int y)
         {
             _xPosition = x;
             _yPosition = y;
@@ -18,13 +18,12 @@ namespace Thin_Ice.Model
 
         private void setAppearance()
         {
-            _image = new Uri("pack://application:,,,/Thin Ice;component/Resources/wall.png");
+            _image = new Uri("pack://application:,,,/Thin Ice;component/Resources/floor.png");
         }
 
         public override bool isMovable()
         {
-            return true;
+            return false;
         }
-
     }
 }

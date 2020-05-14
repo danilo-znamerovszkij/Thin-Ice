@@ -7,16 +7,26 @@ using System.Threading.Tasks;
 using Thin_Ice.Common;
 using System.Windows.Input;
 using Thin_Ice.Model;
+using System.Collections.Specialized;
 
 namespace Thin_Ice.ViewModel
 {
+    class Simple
+    {
+        public double Width
+        {
+            get
+            {
+                return 30;
+            }
+        }
+    }
     class GameViewModel : Observer
     {
 
         public GameViewModel()
         {
             GameLogic = new Game();
-            Console.WriteLine("New game");
             UpKeyPressedCommand = new KeyPressedCommand(OnUpKeyPressed);
             RightKeyPressedCommand = new KeyPressedCommand(OnRightKeyPressed);
             DownKeyPressedCommand = new KeyPressedCommand(OnDownKeyPressed);

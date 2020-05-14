@@ -14,11 +14,15 @@
         <KeyBinding Key="Down" Command="{Binding DownKeyPressedCommand}"></KeyBinding>
         <KeyBinding Key="Left" Command="{Binding LeftKeyPressedCommand}"></KeyBinding>
     </Window.InputBindings>
+    
     <Viewbox>
+        
         <Canvas Background="LightGreen" Name="GameBoard" Width="550" Height="525">
-
+            
+           
             <Rectangle Width="{Binding GameLogic.Player.WidthPixels, Mode=OneWay}" 
                        Height="{Binding GameLogic.Player.HeightPixels, Mode=OneWay}" 
+                       Canvas.ZIndex="3"
                        >
                 <Rectangle.Fill>
                     <ImageBrush ImageSource="pack://application:,,,/Thin Ice;component/Resources/player.png" />
@@ -35,10 +39,44 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
+           
 
             <Grid>
-
-            </Grid>
+                <ItemsControl ItemsSource="{Binding GameLogic.Board}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Rectangle Width="{Binding WidthPixels, Mode=OneWay}" 
+                                   Height="{Binding HeightPixels, Mode=OneWay}"
+                                   Grid.Column="2"
+                                   
+                                   >
+                                <Rectangle.Fill>
+                                    <ImageBrush ImageSource="{ Binding Image, Mode=OneWay}" />
+                                </Rectangle.Fill>
+                                <!--<Rectangle.RenderTransform>
+                                <TransformGroup>
+                                    <TranslateTransform X="{Binding XPosition, Mode=OneWay}" 
+                                        Y="{Binding YPosition, Mode=OneWay}">
+                                    </TranslateTransform>
+                                </TransformGroup>
+                            </Rectangle.RenderTransform>-->
+                            </Rectangle>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="Canvas.Left" Value="{Binding XPosition}" />
+                            <Setter Property="Canvas.Top" Value="{Binding YPosition}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+               
+                </Grid>
 
         </Canvas>
 

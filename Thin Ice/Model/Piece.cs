@@ -11,12 +11,13 @@ namespace Thin_Ice.Model
     {
         #region Fields
 
-        protected double _xPosition;
-        protected double _yPosition;
+        protected int _xPosition;
+        protected int _yPosition;
         protected double _width = Game.BlockSize;
         protected double _height = Game.BlockSize;
         private double _gameBoardHeightPixels = 100;
         private double _gameBoardWidthPixels = 100;
+        protected Uri _image;
 
         #endregion
 
@@ -25,31 +26,41 @@ namespace Thin_Ice.Model
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Piece()
-        {
 
-        }
-        
+
 
         /// <summary>
         /// Gets or sets the current x ordinate.
         /// </summary>
-        public double XPosition
+        public int XPosition
         {
             get
             {
+                
                 return _xPosition;
+            }
+            set
+            {
+
+                _xPosition = value;
+                RaisePropertyChanged("XPosition");
             }
         }
 
         /// <summary>
         /// Gets or sets the current y ordinate.
         /// </summary>
-        public double YPosition
+        public int YPosition
         {
             get
             {
                 return _yPosition;
+            }
+            set
+            {
+
+                _yPosition = value;
+                RaisePropertyChanged("YPosition");
             }
         }
 
@@ -141,9 +152,45 @@ namespace Thin_Ice.Model
             }
         }
 
+        public Uri Image
+        {
+            get
+            {
+                return _image;
+            }
+        }
+
         #endregion
 
         #region Methods
+        public bool isTopCollision(Piece piece)
+        {
+            return YPosition - Game.BlockSize == piece.YPosition && XPosition == piece.XPosition;
+        }
+
+        public bool isBottomCollision(Piece piece)
+        {
+            return YPosition + Game.BlockSize == piece.YPosition && XPosition == piece.XPosition;
+        }
+
+        public bool isLeftCollision(Piece piece)
+        {
+            return XPosition - Game.BlockSize == piece.XPosition && YPosition == piece.YPosition;
+        }
+
+        public bool isRightCollision(Piece piece)
+        {
+            return XPosition + Game.BlockSize == piece.XPosition && YPosition == piece.YPosition;
+        }
+
+        public bool isInTheSamePlace(Piece piece)
+        {
+            return YPosition == piece.YPosition && XPosition == piece.XPosition;
+        }
+
+        public abstract bool isMovable();
+
+
         #endregion
     }
 }

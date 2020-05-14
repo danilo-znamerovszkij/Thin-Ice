@@ -46,5 +46,10 @@ namespace Thin_Ice.Model
                 _xPosition -= Game.BlockSize;
 
         }
+
+        public override bool isMovable()
+        {
+            return false;
+        }
     }
 }
