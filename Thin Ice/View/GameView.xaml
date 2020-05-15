@@ -4,19 +4,160 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Thin_Ice.View"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
         Title="Thin Ice" 
-        Height="600" Width="600" 
-        MinHeight="500" MinWidth="500">
+        ResizeMode="NoResize"
+        Height="550" Width="550">
+    <Window.InputBindings>
+        <KeyBinding Key="Up" Command="{Binding UpKeyPressedCommand}"></KeyBinding>
+        <KeyBinding Key="Right" Command="{Binding RightKeyPressedCommand}"></KeyBinding>
+        <KeyBinding Key="Down" Command="{Binding DownKeyPressedCommand}"></KeyBinding>
+        <KeyBinding Key="Left" Command="{Binding LeftKeyPressedCommand}"></KeyBinding>
+
+        <KeyBinding Key="P" Command="{Binding PKeyPressedCommand}"></KeyBinding>
+
+        <KeyBinding Key="R" Command="{Binding RKeyPressedCommand}"></KeyBinding>
+
+    </Window.InputBindings>
+
     <Viewbox>
-        <Canvas Background="Black" Name="GameBoard" Width="500" Height="200">
+        <Canvas Background="LightSkyBlue" Name="GameBoard" Width="550" Height="525">
+            
+
+            <Rectangle Width="{Binding GameLogic.Player.WidthPixels, Mode=OneWay}" 
+                       Height="{Binding GameLogic.Player.HeightPixels, Mode=OneWay}" 
+                       Canvas.ZIndex="3"
+                       >
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="pack://application:,,,/Thin Ice;component/Resources/player.png" />
+                </Rectangle.Fill>
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <TranslateTransform X="{Binding GameLogic.Player.XPosition, Mode=OneWay}" 
+                                            Y="{Binding GameLogic.Player.YPosition, Mode=OneWay}">
+                        </TranslateTransform>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+
+            <Rectangle Width="400" 
+                       Height="350" 
+                       Canvas.ZIndex="4"
+                       Fill="AliceBlue"
+                       Canvas.Left="75"
+                       Canvas.Top="75"
+                       Opacity="{Binding GameLogic.IsOnPause}"
+                       >
+            </Rectangle>
+            <TextBlock Opacity="{Binding GameLogic.IsOnPause}" TextAlignment="Center" Text="" Canvas.ZIndex="5"
+                           
+                            Foreground="DodgerBlue" FontFamily="Century Gothic"
+                              FontSize="23"
+                              FontStretch="ExtraExpanded"
+
+                              FontWeight="UltraBold"
+  
+                              LineHeight="Auto"
+                              Padding="150,115,150,20"
+
+                              Typography.NumeralStyle="OldStyle"
+                              Typography.SlashedZero="True">
+                <Run>Exit pause menu (P)</Run>
+                <LineBreak></LineBreak><LineBreak></LineBreak>
+                <LineBreak></LineBreak><LineBreak></LineBreak>
+                <Run>Restart the game (R)</Run>
+                <LineBreak></LineBreak><LineBreak></LineBreak>
+                <LineBreak></LineBreak><LineBreak></LineBreak>
+                <Run>Back to main menu (M)</Run>
+            </TextBlock>
+            <Image
+                    Canvas.ZIndex="5"
+                    Opacity="{Binding GameLogic.IsLevelLost}"
+                    gif:ImageBehavior.RepeatBehavior="Forever"
+                    gif:ImageBehavior.AnimatedSource="pack://application:,,,/Thin Ice;component/Resources/rip.gif" 
+                    />
 
             <Grid>
+
+
+                <ItemsControl ItemsSource="{Binding GameLogic.Board}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Rectangle Width="{Binding WidthPixels, Mode=OneWay}" 
+                                   Height="{Binding HeightPixels, Mode=OneWay}"
+                                   Grid.Column="2"
+                                   
+                                   >
+                                <Rectangle.Fill>
+                                    <ImageBrush ImageSource="{ Binding Image, Mode=OneWay}" />
+                                </Rectangle.Fill>
+                                <!--<Rectangle.RenderTransform>
+                                <TransformGroup>
+                                    <TranslateTransform X="{Binding XPosition, Mode=OneWay}" 
+                                        Y="{Binding YPosition, Mode=OneWay}">
+                                    </TranslateTransform>
+                                </TransformGroup>
+                            </Rectangle.RenderTransform>-->
+                            </Rectangle>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="Canvas.Left" Value="{Binding XPosition}" />
+                            <Setter Property="Canvas.Top" Value="{Binding YPosition}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+                <TextBlock TextAlignment="Right" Text='{Binding GameLogic.Score, StringFormat=SCORE: {0}}'
+                    Background="DodgerBlue" 
+                    Foreground="White" FontFamily="Century Gothic"
+                    FontSize="13"
+                    FontStretch="ExtraExpanded"
+
+                    FontWeight="UltraBold"
+  
+                    LineHeight="Auto"
+                    Padding="400,2,150,2"
+
+                    Typography.NumeralStyle="OldStyle"
+                    Typography.SlashedZero="True">
+                </TextBlock>
+                <TextBlock TextAlignment="Left" Text="Pause(P)"      
+                    Foreground="White" FontFamily="Century Gothic"
+                    FontSize="15"
+                    FontStretch="Medium"
+
+                    FontWeight="Medium"
+  
+                    LineHeight="Auto"
+                    Padding="10,2,0,0"
+                    Typography.NumeralStyle="OldStyle"
+                    Typography.SlashedZero="True">
+                </TextBlock>
+                <TextBlock TextAlignment="Left" Text="Press R to restart"      
+                    Foreground="White" FontFamily="Century Gothic"
+                    FontSize="15"
+                    FontStretch="Medium"
+
+                    FontWeight="Medium"
+  
+                    LineHeight="Auto"
+                    Padding="150,2,0,0"
+                    Opacity="{Binding GameLogic.IsLevelLost}"
+                    Typography.NumeralStyle="OldStyle"
+                    Typography.SlashedZero="True">
+                </TextBlock>
                 
             </Grid>
-        
+
         </Canvas>
-        
+
     </Viewbox>
-   
+
 </Window>

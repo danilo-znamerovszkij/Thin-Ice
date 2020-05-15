@@ -7,20 +7,33 @@ using System.Threading.Tasks;
 using Thin_Ice.Common;
 using System.Windows.Input;
 using Thin_Ice.Model;
+using System.Collections.Specialized;
 
 namespace Thin_Ice.ViewModel
 {
+    class Simple
+    {
+        public double Width
+        {
+            get
+            {
+                return 30;
+            }
+        }
+    }
     class GameViewModel : Observer
     {
 
         public GameViewModel()
         {
             GameLogic = new Game();
-
             UpKeyPressedCommand = new KeyPressedCommand(OnUpKeyPressed);
             RightKeyPressedCommand = new KeyPressedCommand(OnRightKeyPressed);
             DownKeyPressedCommand = new KeyPressedCommand(OnDownKeyPressed);
             LeftKeyPressedCommand = new KeyPressedCommand(OnLeftKeyPressed);
+
+            PKeyPressedCommand = new KeyPressedCommand(OnPKeyPressed);
+            RKeyPressedCommand = new KeyPressedCommand(OnRKeyPressed);
 
         }
 
@@ -63,24 +76,51 @@ namespace Thin_Ice.ViewModel
             private set;
         }
 
+        /// <summary>
+        /// Gets or sets the P key pressed command.
+        /// </summary>
+        public ICommand PKeyPressedCommand
+        {
+            get;
+            private set;
+        }
+
+        public ICommand RKeyPressedCommand
+        {
+            get;
+            private set;
+        }
+
         private void OnUpKeyPressed(object arg)
         {
-          
             //get state
-            //if (GameLogic.getState() == IN_GAME ) GameLogic.ProccessKeyboardEvent(Direction.Up) 
+            if (GameLogic.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_UP);
 
         }
 
         private void OnRightKeyPressed(object arg)
         {
+            if (GameLogic.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_RIGHT);
         }
 
         private void OnDownKeyPressed(object arg)
         {
+            if (GameLogic.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_DOWN);
         }
 
         private void OnLeftKeyPressed(object arg)
         {
+            if (GameLogic.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_LEFT);
+        }
+
+        private void OnPKeyPressed(object arg)
+        {
+            GameLogic.ProccessStateChangeEvent(Game.PAUSE);
+        }
+
+        private void OnRKeyPressed(object arg)
+        {
+            GameLogic.ProccessStateChangeEvent(Game.RESTART);
         }
 
 

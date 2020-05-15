@@ -13,18 +13,22 @@ C:\Users\Gebruiker\Documents\Thin Ice\Thin Ice\obj\Debug\Thin Ice.csproj.Generat
 C:\Users\Gebruiker\Documents\Thin Ice\Thin Ice\obj\Debug\Thin Ice.csproj.CoreCompileInputs.cache
 C:\Users\Gebruiker\Documents\Thin Ice\Thin Ice\obj\Debug\Thin Ice.exe
 C:\Users\Gebruiker\Documents\Thin Ice\Thin Ice\obj\Debug\Thin Ice.pdb
+C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\App.g.cs
+C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice_MarkupCompile.cache
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\bin\Debug\Thin Ice.exe.config
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\bin\Debug\Thin Ice.exe
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\bin\Debug\Thin Ice.pdb
-C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.csprojAssemblyReference.cache
+C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\bin\Debug\WpfAnimatedGif.dll
+C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\bin\Debug\WpfAnimatedGif.pdb
+C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\bin\Debug\WpfAnimatedGif.xml
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\View\GameView.g.cs
-C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\App.g.cs
-C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice_MarkupCompile.cache
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice_MarkupCompile.lref
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\View\GameView.baml
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.g.resources
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin_Ice.Properties.Resources.resources
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.csproj.GenerateResource.cache
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.csproj.CoreCompileInputs.cache
+C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.csproj.CopyComplete
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.exe
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.pdb
+C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.csprojAssemblyReference.cache
