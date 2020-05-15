@@ -10,8 +10,8 @@ namespace Thin_Ice.Common
     class KeyPressedCommand : ICommand
     {
 
-        private Action<object> _execute;
-        private Func<object, bool> _canExecute;
+        private readonly Action<object> _execute;
+        private readonly Func<object, bool> _canExecute;
 
         public KeyPressedCommand(Action<object> execute)
         {

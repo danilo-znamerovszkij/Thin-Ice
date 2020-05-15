@@ -18,6 +18,7 @@ namespace Thin_Ice.Model
         public const int IN_GAME = 1;
         public const int IN_MAIN_MENU = 2;
         public const int RESTART = 3;
+        public const int IN_FINAL_SCREEN = 4;
 
         public const int DIRECTION_UP = 0;
         public const int DIRECTION_DOWN = 1;
@@ -36,23 +37,29 @@ namespace Thin_Ice.Model
         public const int BlockSize = 25;
 
         public int difficulty = 30;
-       
+        
 
 
         public Game()
         {
-            //generate level
-            //width 27, h=25
+            
             IsLevelLost = 0;
             IsOnPause = 0;
+            MainMenuVisibility = 1;
+            CongratsScreenVisibility = 0;
 
-            CurrentState = IN_GAME;
+            StateManager = new StateManager
+            {
+                CurrentState = IN_MAIN_MENU
+            };
 
             Board = new ObservableCollection<Piece>();
             Player = new Player(50, 50);
+            Level = 1;
 
             InitLevel(difficulty);
 
+            RaisePropertyChanged("Level");
             RaisePropertyChanged("Score");
             RaisePropertyChanged("Board");
 
@@ -66,7 +73,7 @@ namespace Thin_Ice.Model
 
                 case IN_GAME:
 
-
+                    InitGame();
                     break;
 
                 case RESTART:
@@ -81,26 +88,62 @@ namespace Thin_Ice.Model
 
                 case IN_MAIN_MENU:
 
+                    InitMainMenu();
                     break;
+
             }
+        }
+
+        private void InitMainMenu()
+        {
+            if (StateManager.CurrentState == PAUSE) SetOnPause();
+            if (StateManager.CurrentState == IN_FINAL_SCREEN) ToggleCongratsScreen();
+
+            StateManager.CurrentState = IN_MAIN_MENU;
+
+            MainMenuVisibility = 1;
+            RaisePropertyChanged("MainMenuVisibility");
+        }
+
+        private void InitGame()
+        {
+            if (StateManager.CurrentState == IN_MAIN_MENU)
+            {
+                MainMenuVisibility = 0;
+                RaisePropertyChanged("MainMenuVisibility");
+
+                difficulty = 30;
+                Level = 1;
+                InitLevel(difficulty);
+                RaisePropertyChanged("Score");
+            }
+
+            StateManager.CurrentState = IN_GAME;
+
+        }
+
+        private void ToggleCongratsScreen()
+        {
+            CongratsScreenVisibility = (CongratsScreenVisibility == 1) ? 0 : 1;
+            RaisePropertyChanged("CongratsScreenVisibility");
+
         }
 
         private void SetOnPause()
         {
-            if(CurrentState == PAUSE)
+            if (StateManager.CurrentState == PAUSE)
             {
-                CurrentState = IN_GAME;
+                StateManager.CurrentState = IN_GAME;
                 IsOnPause = 0;
                 RaisePropertyChanged("IsOnPause");
             }
-            else
+            else if (StateManager.CurrentState == IN_GAME)
             {
-                CurrentState = PAUSE;
+                StateManager.CurrentState = PAUSE;
                 IsOnPause = 1;
                 RaisePropertyChanged("IsOnPause");
             }
 
-            
         }
 
         public void ProccessPlayerMoveEvent(int direction)
@@ -118,37 +161,37 @@ namespace Thin_Ice.Model
 
             CheckMoneyBagCollision();
 
+            CheckIfLevelComplete();
+
             CheckIfPlayerStuck();
 
-            CheckIfLevelComplete();
         }
 
         private void CheckIfPlayerStuck()
         {
-            if ( (CheckWallCollision(Game.DIRECTION_DOWN) || CheckMeltedIceCollision(Game.DIRECTION_DOWN))
+            if ((CheckWallCollision(Game.DIRECTION_DOWN) || CheckMeltedIceCollision(Game.DIRECTION_DOWN))
                && (CheckWallCollision(Game.DIRECTION_UP) || CheckMeltedIceCollision(Game.DIRECTION_UP))
                && (CheckWallCollision(Game.DIRECTION_LEFT) || CheckMeltedIceCollision(Game.DIRECTION_LEFT))
                && (CheckWallCollision(Game.DIRECTION_RIGHT) || CheckMeltedIceCollision(Game.DIRECTION_RIGHT)))
             {
-                
+
                 IsLevelLost = 1;
                 RaisePropertyChanged("IsLevelLost");
 
                 if (IsLevelLost == 1)
                 {
                     System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-                    dispatcherTimer.Tick += levelLostTimer_Tick;
+                    dispatcherTimer.Tick += LevelLostTimer_Tick;
                     dispatcherTimer.Interval = new TimeSpan(0, 0, 3);
                     dispatcherTimer.Start();
                 }
-                
+
             }
-                            
+
         }
 
-        private void levelLostTimer_Tick(object sender, EventArgs e)
+        private void LevelLostTimer_Tick(object sender, EventArgs e)
         {
-            // code goes here
             IsLevelLost = 0;
             RaisePropertyChanged("IsLevelLost");
         }
@@ -160,18 +203,26 @@ namespace Thin_Ice.Model
             foreach (var p in Board)
             {
 
-                if (p is NextLevelDoor && Player.isInTheSamePlace(p))
+                if (p is NextLevelDoor && Player.IsInTheSamePlace(p))
                 {
                     IsLevelCompleted = true;
 
-                    difficulty += 100;
+                    if (Score >= 300)
+                    {
+                        ToggleCongratsScreen();
+                        StateManager.CurrentState = IN_FINAL_SCREEN;
+                    }
 
-                    //TODO: init next level
+
+                    difficulty += 100;
+                    Level++;
+
                     InitLevel(difficulty);
 
+                    RaisePropertyChanged("Level");
                     RaisePropertyChanged("Score");
                     RaisePropertyChanged("Board");
-                    
+
                     return true;
                 }
 
@@ -179,56 +230,42 @@ namespace Thin_Ice.Model
 
             return false;
 
-                //isCompleted = true;
-                //if (currentLevel.equals(easyLevel.generate()))
-                //{
-                //    currentLevel = mediumLevel.generate();
-                //}
-                //else if (currentLevel.equals(mediumLevel.generate()))
-                //{
-                //    currentLevel = hardLevel.generate();
-                //}
-                //else if (currentLevel.equals(hardLevel.generate()))
-                //{
-                //    currentLevel = easyLevel.generate();
-                //    endGame.init(stateObserver);
-                //}
-
-                ////initiate the next level
-                //restartLevel();
-                //repaint();
-            
         }
 
         private void InitLevel(int difficulty)
         {
+            if(difficulty == 30)
+            {
+                Score = 0;
+                difficulty = 30;
+                Level = 1;
+            }
+
             Board.Clear();
+
             int tempScore = Score;
+
             Player.XPosition = 50;
             Player.YPosition = 50;
 
-            for (int x = 0; x <= Game.DefaultGameWidth; x = x + Game.BlockSize)
+            for (int x = 0; x <= Game.DefaultGameWidth; x += Game.BlockSize)
             {
-                for (int y = 0; y <= Game.DefaultGameHeight; y = y + Game.BlockSize)
+                for (int y = 0; y <= Game.DefaultGameHeight; y += Game.BlockSize)
                 {
                     //draw border
                     if (x == 0 || y == 0
                         || x == Game.DefaultGameWidth - Game.BlockSize
                         || y == Game.DefaultGameHeight - Game.BlockSize)
                         Board.Add(new IceBlock(x, y));
-
-                    //draw level
-
                 }
-
             }
 
             Random _randomNumber = new Random((int)DateTime.Now.Ticks);
-            int steps = 0;
-            ObservableCollection<Piece> Level = new ObservableCollection<Piece>();
-            int tempx, tempy, n, tempn =0;
+            int steps = 1;
+            int tempx, tempy, n, tempn = 0;
             while (steps <= difficulty)
             {
+
                 if (steps % 2 == 0)
                     n = _randomNumber.Next(1, 3);
                 else
@@ -244,30 +281,23 @@ namespace Thin_Ice.Model
                 {
                     Player.Direction = n;
                     if (steps % 10 == 0)
-                    {
                         Board.Add(new MoneyBag(tempx, tempy));
-
-                    }
                     else
                         Board.Add(new IceFloor(tempx, tempy));
                 }
-
-                //add a random money bag
-                
 
                 if (steps == difficulty)
                 {
                     Board.Add(new NextLevelDoor(Player.XPosition, Player.YPosition));
                 }
 
-                //save cell
                 steps++;
             }
 
 
-            for (int x = Game.BlockSize; x <= Game.DefaultGameWidth - Game.BlockSize; x = x + Game.BlockSize)
+            for (int x = Game.BlockSize; x <= Game.DefaultGameWidth - Game.BlockSize; x += Game.BlockSize)
             {
-                for (int y = Game.BlockSize; y <= Game.DefaultGameHeight - Game.BlockSize; y = y + Game.BlockSize)
+                for (int y = Game.BlockSize; y <= Game.DefaultGameHeight - Game.BlockSize; y += Game.BlockSize)
                 {
                     //if ice floor put a block to the left
                     var flag = true;
@@ -296,22 +326,11 @@ namespace Thin_Ice.Model
 
             foreach (var p in Board)
             {
-                if (p is MoneyBag && Player.isInTheSamePlace(p))
+                if (p is MoneyBag && Player.IsInTheSamePlace(p))
                 {
                     Board.Remove(p);
                     Score += 100;
                     RaisePropertyChanged("Score");
-
-
-                    var image = new BitmapImage();
-                    image.BeginInit();
-                    image.UriSource = new Uri("pack://application:,,,/Thin Ice;component/Resources/key.gif");
-                    image.EndInit();
-                    Image img = new Image();
-                    ImageBehavior.SetAnimatedSource( img, image);
-
-
-
 
                     return true;
                 }
@@ -331,8 +350,8 @@ namespace Thin_Ice.Model
 
                     foreach (var p in Board)
                     {
-                        
-                        if (p is MeltedIce && Player.isTopCollision(p))
+
+                        if (p is MeltedIce && Player.IsTopCollision(p))
                         {
                             return true;
                         }
@@ -344,7 +363,7 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is MeltedIce && Player.isBottomCollision(p))
+                        if (p is MeltedIce && Player.IsBottomCollision(p))
                         {
                             return true;
                         }
@@ -356,7 +375,7 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is MeltedIce && Player.isLeftCollision(p))
+                        if (p is MeltedIce && Player.IsLeftCollision(p))
                         {
                             return true;
                         }
@@ -368,7 +387,7 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is MeltedIce && Player.isRightCollision(p))
+                        if (p is MeltedIce && Player.IsRightCollision(p))
                         {
                             return true;
                         }
@@ -376,56 +395,6 @@ namespace Thin_Ice.Model
                     }
                     break;
             }
-            //    case RIGHT_COLLISION:
-
-            //        for (int i = 0; i < blocks.size(); i++)
-            //        {
-
-            //            Block block = blocks.get(i);
-
-            //            if (piece.isRightCollision(block))
-            //            {
-            //                return true;
-            //            }
-            //        }
-
-            //        return false;
-
-            //    case TOP_COLLISION:
-
-            //        for (int i = 0; i < blocks.size(); i++)
-            //        {
-
-            //            Block block = blocks.get(i);
-
-            //            if (piece.isTopCollision(block))
-            //            {
-
-            //                return true;
-            //            }
-            //        }
-
-            //        return false;
-
-            //    case BOTTOM_COLLISION:
-
-            //        for (int i = 0; i < blocks.size(); i++)
-            //        {
-
-            //            Block block = blocks.get(i);
-
-            //            if (piece.isBottomCollision(block))
-            //            {
-
-            //                return true;
-            //            }
-            //        }
-
-            //        return false;
-
-            //    default:
-            //        break;
-            //}
 
             return false;
         }
@@ -436,10 +405,10 @@ namespace Thin_Ice.Model
             {
 
                 case DIRECTION_UP:
-                    
+
                     foreach (var p in Board)
                     {
-                        if (p is IceBlock && Player.isTopCollision(p))
+                        if (p is IceBlock && Player.IsTopCollision(p))
                         {
                             return true;
                         }
@@ -452,7 +421,7 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is IceBlock && Player.isBottomCollision(p))
+                        if (p is IceBlock && Player.IsBottomCollision(p))
                         {
                             return true;
                         }
@@ -464,7 +433,7 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is IceBlock && Player.isLeftCollision(p))
+                        if (p is IceBlock && Player.IsLeftCollision(p))
                         {
                             return true;
                         }
@@ -476,16 +445,16 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is IceBlock && Player.isRightCollision(p))
+                        if (p is IceBlock && Player.IsRightCollision(p))
                         {
                             return true;
                         }
 
                     }
                     break;
-                
+
             }
-           
+
 
             return false;
         }
@@ -499,7 +468,7 @@ namespace Thin_Ice.Model
 
                     foreach (var p in Board)
                     {
-                        if (p is IceFloor && Player.isTopCollision(p))
+                        if (p is IceFloor && Player.IsTopCollision(p))
                         {
                             return true;
                         }
@@ -512,7 +481,7 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is IceFloor && Player.isBottomCollision(p))
+                        if (p is IceFloor && Player.IsBottomCollision(p))
                         {
                             return true;
                         }
@@ -524,7 +493,7 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is IceFloor && Player.isLeftCollision(p))
+                        if (p is IceFloor && Player.IsLeftCollision(p))
                         {
                             return true;
                         }
@@ -536,9 +505,9 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is IceFloor && Player.isRightCollision(p))
+                        if (p is IceFloor && Player.IsRightCollision(p))
                         {
-                            return true; 
+                            return true;
                         }
 
                     }
@@ -549,13 +518,15 @@ namespace Thin_Ice.Model
 
             return false;
         }
-        
+
         private void MeltTheIce(int x, int y)
         {
             Board.Add(new MeltedIce(x, y));
         }
-        public Player Player { get; private set; }
 
+        public int Level { get; private set; }
+        public Player Player { get; private set; }
+        public StateManager StateManager { get; private set; }
         public ObservableCollection<Piece> Board { get; private set; }
 
         public double BlockSizeWidth
@@ -578,6 +549,8 @@ namespace Thin_Ice.Model
         public bool IsLevelCompleted { get; private set; }
         public int IsLevelLost { get; private set; }
         public int IsOnPause { get; private set; }
-        public int CurrentState { get; private set; }
+        public int InMainMenu { get; private set; }
+        public int MainMenuVisibility { get; private set; }
+        public int CongratsScreenVisibility { get; private set; }
     }
 }

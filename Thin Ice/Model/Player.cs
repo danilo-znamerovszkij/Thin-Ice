@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Thin_Ice.Model
 {
-    class Player : Piece
+    class Player : MovablePiece
     {
         private int _direction;
 
@@ -15,7 +15,6 @@ namespace Thin_Ice.Model
             _xPosition = x;
             _yPosition = y;
         }
-
         public int Direction
         {
             get
@@ -25,26 +24,12 @@ namespace Thin_Ice.Model
             set
             {
                 _direction = value;
-                move(_direction);
+                Move(_direction);
                 RaisePropertyChanged("XPosition");
                 RaisePropertyChanged("YPosition");
                 RaisePropertyChanged("DirectionOfTravel");
                 RaisePropertyChanged("DirectionOfTravelDegrees");
             }
-        }
-
-        public void move(int direction)
-        {
-
-            if (direction == Game.DIRECTION_UP)
-                _yPosition -= Game.BlockSize;
-            else if (direction == Game.DIRECTION_DOWN)
-                _yPosition += Game.BlockSize;
-            else if (direction == Game.DIRECTION_RIGHT)
-                _xPosition += Game.BlockSize;
-            else if (direction == Game.DIRECTION_LEFT)
-                _xPosition -= Game.BlockSize;
-
         }
 
     }

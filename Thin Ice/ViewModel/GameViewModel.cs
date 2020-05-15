@@ -27,6 +27,7 @@ namespace Thin_Ice.ViewModel
         public GameViewModel()
         {
             GameLogic = new Game();
+
             UpKeyPressedCommand = new KeyPressedCommand(OnUpKeyPressed);
             RightKeyPressedCommand = new KeyPressedCommand(OnRightKeyPressed);
             DownKeyPressedCommand = new KeyPressedCommand(OnDownKeyPressed);
@@ -34,6 +35,9 @@ namespace Thin_Ice.ViewModel
 
             PKeyPressedCommand = new KeyPressedCommand(OnPKeyPressed);
             RKeyPressedCommand = new KeyPressedCommand(OnRKeyPressed);
+            MKeyPressedCommand = new KeyPressedCommand(OnMKeyPressed);
+
+            EnterKeyPressedCommand = new KeyPressedCommand(OnEnterKeyPressed);
 
         }
 
@@ -91,26 +95,37 @@ namespace Thin_Ice.ViewModel
             private set;
         }
 
+        public ICommand MKeyPressedCommand
+        {
+            get;
+            private set;
+        }
+        public ICommand EnterKeyPressedCommand 
+        { 
+            get; 
+            private set; 
+        }
+
         private void OnUpKeyPressed(object arg)
         {
-            //get state
-            if (GameLogic.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_UP);
+            
+            if (GameLogic.StateManager.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_UP);
 
         }
 
         private void OnRightKeyPressed(object arg)
         {
-            if (GameLogic.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_RIGHT);
+            if (GameLogic.StateManager.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_RIGHT);
         }
 
         private void OnDownKeyPressed(object arg)
         {
-            if (GameLogic.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_DOWN);
+            if (GameLogic.StateManager.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_DOWN);
         }
 
         private void OnLeftKeyPressed(object arg)
         {
-            if (GameLogic.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_LEFT);
+            if (GameLogic.StateManager.CurrentState == Game.IN_GAME) GameLogic.ProccessPlayerMoveEvent(Game.DIRECTION_LEFT);
         }
 
         private void OnPKeyPressed(object arg)
@@ -123,6 +138,18 @@ namespace Thin_Ice.ViewModel
             GameLogic.ProccessStateChangeEvent(Game.RESTART);
         }
 
+        private void OnMKeyPressed(object arg)
+        {
+            GameLogic.ProccessStateChangeEvent(Game.IN_MAIN_MENU);
+        }
+
+        private void OnEnterKeyPressed(object arg)
+        {
+            if (GameLogic.StateManager.CurrentState == Game.IN_FINAL_SCREEN) 
+                GameLogic.ProccessStateChangeEvent(Game.IN_MAIN_MENU);
+            else
+                GameLogic.ProccessStateChangeEvent(Game.IN_GAME);
+        }
 
     }
 }

@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Thin_Ice.Model
 {
-    class MoneyBag : Piece
+    internal class MoneyBag : Piece
     {
         public MoneyBag(int x, int y)
         {
             _xPosition = x;
             _yPosition = y;
 
-            setAppearance();
+            SetAppearance();
         }
 
-        private void setAppearance()
+        private void SetAppearance()
         {
             _image = new Uri("pack://application:,,,/Thin Ice;component/Resources/money_bag.png");
         }
