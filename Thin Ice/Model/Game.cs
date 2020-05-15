@@ -219,7 +219,6 @@ namespace Thin_Ice.Model
 
                     //draw level
 
-
                 }
 
             }
@@ -376,7 +375,6 @@ namespace Thin_Ice.Model
 
                     }
                     break;
-
             }
             //    case RIGHT_COLLISION:
 
