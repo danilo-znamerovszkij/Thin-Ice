@@ -19,19 +19,6 @@ namespace Thin_Ice.Model
         private readonly double _gameBoardWidthPixels = 100;
         protected Uri _image;
 
-        #endregion
-
-        #region Constructors
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-
-
-
-        /// <summary>
-        /// Gets or sets the current x ordinate.
-        /// </summary>
         public int XPosition
         {
             get
@@ -47,9 +34,6 @@ namespace Thin_Ice.Model
             }
         }
 
-        /// <summary>
-        /// Gets or sets the current y ordinate.
-        /// </summary>
         public int YPosition
         {
             get
@@ -143,7 +127,6 @@ namespace Thin_Ice.Model
         {
             return YPosition == piece.YPosition && XPosition == piece.XPosition;
         }
-
 
         #endregion
     }

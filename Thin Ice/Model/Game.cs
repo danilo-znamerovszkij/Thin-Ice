@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.ObjectModel;
-using System.Security.Cryptography;
-using System.Threading;
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 using Thin_Ice.Common;
-using WpfAnimatedGif;
 
 namespace Thin_Ice.Model
 {
@@ -31,18 +23,15 @@ namespace Thin_Ice.Model
         public const double GameBoardWidthScale = 100;
         public const double GameBoardHeightScale = 100;
 
-        public const int StartLevel = 1;
-        public const int EndLevel = 200;
+        private readonly int VictoryScore = 1500;
 
         public const int BlockSize = 25;
 
-        public int difficulty = 30;
-        
-
+        private int difficulty = 30;
 
         public Game()
         {
-            
+
             IsLevelLost = 0;
             IsOnPause = 0;
             MainMenuVisibility = 1;
@@ -64,7 +53,6 @@ namespace Thin_Ice.Model
             RaisePropertyChanged("Board");
 
         }
-
 
         public void ProccessStateChangeEvent(int state)
         {
@@ -93,7 +81,26 @@ namespace Thin_Ice.Model
 
             }
         }
+        public void ProccessPlayerMoveEvent(int direction)
+        {
+            if (CheckPieceCollision(direction, typeof(IceBlock))
+               || CheckPieceCollision(direction, typeof(MeltedIce)))
+                return;
 
+
+            MeltTheIce(Player.XPosition, Player.YPosition);
+
+            Player.Direction = direction;
+
+            CheckCollectableCollision();
+
+            CheckIfLevelComplete();
+
+            CheckIfLevelComplete();
+
+            CheckIfPlayerStuck();
+
+        }
         private void InitMainMenu()
         {
             if (StateManager.CurrentState == PAUSE) SetOnPause();
@@ -104,7 +111,6 @@ namespace Thin_Ice.Model
             MainMenuVisibility = 1;
             RaisePropertyChanged("MainMenuVisibility");
         }
-
         private void InitGame()
         {
             if (StateManager.CurrentState == IN_MAIN_MENU)
@@ -121,14 +127,12 @@ namespace Thin_Ice.Model
             StateManager.CurrentState = IN_GAME;
 
         }
-
         private void ToggleCongratsScreen()
         {
             CongratsScreenVisibility = (CongratsScreenVisibility == 1) ? 0 : 1;
             RaisePropertyChanged("CongratsScreenVisibility");
 
         }
-
         private void SetOnPause()
         {
             if (StateManager.CurrentState == PAUSE)
@@ -145,34 +149,12 @@ namespace Thin_Ice.Model
             }
 
         }
-
-        public void ProccessPlayerMoveEvent(int direction)
-        {
-            if (CheckWallCollision(direction))
-                return;
-
-
-            if (CheckMeltedIceCollision(direction))
-                return;
-
-            MeltTheIce(Player.XPosition, Player.YPosition);
-
-            Player.Direction = direction;
-
-            CheckMoneyBagCollision();
-
-            CheckIfLevelComplete();
-
-            CheckIfPlayerStuck();
-
-        }
-
         private void CheckIfPlayerStuck()
         {
-            if ((CheckWallCollision(Game.DIRECTION_DOWN) || CheckMeltedIceCollision(Game.DIRECTION_DOWN))
-               && (CheckWallCollision(Game.DIRECTION_UP) || CheckMeltedIceCollision(Game.DIRECTION_UP))
-               && (CheckWallCollision(Game.DIRECTION_LEFT) || CheckMeltedIceCollision(Game.DIRECTION_LEFT))
-               && (CheckWallCollision(Game.DIRECTION_RIGHT) || CheckMeltedIceCollision(Game.DIRECTION_RIGHT)))
+            if ((CheckPieceCollision(Game.DIRECTION_DOWN, typeof(IceBlock)) || CheckPieceCollision(Game.DIRECTION_DOWN, typeof(MeltedIce)))
+               && (CheckPieceCollision(Game.DIRECTION_UP, typeof(IceBlock)) || CheckPieceCollision(Game.DIRECTION_UP, typeof(MeltedIce)))
+               && (CheckPieceCollision(Game.DIRECTION_LEFT, typeof(IceBlock)) || CheckPieceCollision(Game.DIRECTION_LEFT, typeof(MeltedIce)))
+               && (CheckPieceCollision(Game.DIRECTION_RIGHT, typeof(IceBlock)) || CheckPieceCollision(Game.DIRECTION_RIGHT, typeof(MeltedIce))))
             {
 
                 IsLevelLost = 1;
@@ -189,14 +171,11 @@ namespace Thin_Ice.Model
             }
 
         }
-
         private void LevelLostTimer_Tick(object sender, EventArgs e)
         {
             IsLevelLost = 0;
             RaisePropertyChanged("IsLevelLost");
         }
-
-
         private bool CheckIfLevelComplete()
         {
 
@@ -207,7 +186,7 @@ namespace Thin_Ice.Model
                 {
                     IsLevelCompleted = true;
 
-                    if (Score >= 300)
+                    if (Score >= VictoryScore)
                     {
                         ToggleCongratsScreen();
                         StateManager.CurrentState = IN_FINAL_SCREEN;
@@ -231,10 +210,28 @@ namespace Thin_Ice.Model
             return false;
 
         }
+        private bool CheckCollectableCollision()
+        {
 
+            foreach (var p in Board)
+            {
+                if (p is MoneyBag && Player.IsInTheSamePlace(p))
+                {
+                    Board.Remove(p);
+                    Score += 100;
+                    RaisePropertyChanged("Score");
+
+                    return true;
+                }
+
+            }
+
+            return false;
+
+        }
         private void InitLevel(int difficulty)
         {
-            if(difficulty == 30)
+            if (difficulty == 30)
             {
                 Score = 0;
                 difficulty = 30;
@@ -277,7 +274,7 @@ namespace Thin_Ice.Model
                 tempn = n;
                 tempx = Player.XPosition;
                 tempy = Player.YPosition;
-                if (!CheckWallCollision(n) && !CheckMoneyBagCollision() && !CheckIceFloorCollision(n))
+                if (!CheckPieceCollision(n, typeof(IceBlock)) && !CheckCollectableCollision() && !CheckPieceCollision(n, typeof(IceFloor)))
                 {
                     Player.Direction = n;
                     if (steps % 10 == 0)
@@ -320,28 +317,7 @@ namespace Thin_Ice.Model
             Score = tempScore;
 
         }
-
-        private bool CheckMoneyBagCollision()
-        {
-
-            foreach (var p in Board)
-            {
-                if (p is MoneyBag && Player.IsInTheSamePlace(p))
-                {
-                    Board.Remove(p);
-                    Score += 100;
-                    RaisePropertyChanged("Score");
-
-                    return true;
-                }
-
-            }
-
-            return false;
-
-        }
-
-        private bool CheckMeltedIceCollision(int direction)
+        private bool CheckPieceCollision(int direction, Type type)
         {
             switch (direction)
             {
@@ -350,9 +326,9 @@ namespace Thin_Ice.Model
 
                     foreach (var p in Board)
                     {
-
-                        if (p is MeltedIce && Player.IsTopCollision(p))
+                        if (p.GetType() == type && Player.IsTopCollision(p))
                         {
+                            Console.WriteLine("This one is definetely is");
                             return true;
                         }
 
@@ -363,7 +339,7 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is MeltedIce && Player.IsBottomCollision(p))
+                        if (p.GetType() == type && Player.IsBottomCollision(p))
                         {
                             return true;
                         }
@@ -375,7 +351,7 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is MeltedIce && Player.IsLeftCollision(p))
+                        if (p.GetType() == type && Player.IsLeftCollision(p))
                         {
                             return true;
                         }
@@ -387,7 +363,7 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
 
-                        if (p is MeltedIce && Player.IsRightCollision(p))
+                        if (p.GetType() == type && Player.IsRightCollision(p))
                         {
                             return true;
                         }
@@ -398,137 +374,14 @@ namespace Thin_Ice.Model
 
             return false;
         }
-
-        private bool CheckWallCollision(int direction)
-        {
-            switch (direction)
-            {
-
-                case DIRECTION_UP:
-
-                    foreach (var p in Board)
-                    {
-                        if (p is IceBlock && Player.IsTopCollision(p))
-                        {
-                            return true;
-                        }
-
-
-                    }
-                    break;
-                case DIRECTION_DOWN:
-
-                    foreach (var p in Board)
-                    {
-
-                        if (p is IceBlock && Player.IsBottomCollision(p))
-                        {
-                            return true;
-                        }
-
-                    }
-                    break;
-                case DIRECTION_LEFT:
-
-                    foreach (var p in Board)
-                    {
-
-                        if (p is IceBlock && Player.IsLeftCollision(p))
-                        {
-                            return true;
-                        }
-
-                    }
-                    break;
-                case DIRECTION_RIGHT:
-
-                    foreach (var p in Board)
-                    {
-
-                        if (p is IceBlock && Player.IsRightCollision(p))
-                        {
-                            return true;
-                        }
-
-                    }
-                    break;
-
-            }
-
-
-            return false;
-        }
-
-        private bool CheckIceFloorCollision(int direction)
-        {
-            switch (direction)
-            {
-
-                case DIRECTION_UP:
-
-                    foreach (var p in Board)
-                    {
-                        if (p is IceFloor && Player.IsTopCollision(p))
-                        {
-                            return true;
-                        }
-
-
-                    }
-                    break;
-                case DIRECTION_DOWN:
-
-                    foreach (var p in Board)
-                    {
-
-                        if (p is IceFloor && Player.IsBottomCollision(p))
-                        {
-                            return true;
-                        }
-
-                    }
-                    break;
-                case DIRECTION_LEFT:
-
-                    foreach (var p in Board)
-                    {
-
-                        if (p is IceFloor && Player.IsLeftCollision(p))
-                        {
-                            return true;
-                        }
-
-                    }
-                    break;
-                case DIRECTION_RIGHT:
-
-                    foreach (var p in Board)
-                    {
-
-                        if (p is IceFloor && Player.IsRightCollision(p))
-                        {
-                            return true;
-                        }
-
-                    }
-                    break;
-
-            }
-
-
-            return false;
-        }
-
         private void MeltTheIce(int x, int y)
         {
             Board.Add(new MeltedIce(x, y));
         }
-
         public int Level { get; private set; }
         public Player Player { get; private set; }
         public StateManager StateManager { get; private set; }
         public ObservableCollection<Piece> Board { get; private set; }
-
         public double BlockSizeWidth
         {
             get
@@ -536,7 +389,6 @@ namespace Thin_Ice.Model
                 return BlockSize;
             }
         }
-
         public double BlockSizeHeight
         {
             get
@@ -544,7 +396,6 @@ namespace Thin_Ice.Model
                 return BlockSize;
             }
         }
-
         public int Score { get; private set; }
         public bool IsLevelCompleted { get; private set; }
         public int IsLevelLost { get; private set; }

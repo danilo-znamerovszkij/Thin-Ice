@@ -11,16 +11,6 @@ using System.Collections.Specialized;
 
 namespace Thin_Ice.ViewModel
 {
-    class Simple
-    {
-        public double Width
-        {
-            get
-            {
-                return 30;
-            }
-        }
-    }
     class GameViewModel : Observer
     {
 
