@@ -15,23 +15,10 @@ namespace Thin_Ice.Model
         protected int _yPosition;
         protected double _width = Game.BlockSize;
         protected double _height = Game.BlockSize;
-        private double _gameBoardHeightPixels = 100;
-        private double _gameBoardWidthPixels = 100;
+        private readonly double _gameBoardHeightPixels = 100;
+        private readonly double _gameBoardWidthPixels = 100;
         protected Uri _image;
 
-        #endregion
-
-        #region Constructors
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-
-
-
-        /// <summary>
-        /// Gets or sets the current x ordinate.
-        /// </summary>
         public int XPosition
         {
             get
@@ -47,9 +34,6 @@ namespace Thin_Ice.Model
             }
         }
 
-        /// <summary>
-        /// Gets or sets the current y ordinate.
-        /// </summary>
         public int YPosition
         {
             get
@@ -119,31 +103,30 @@ namespace Thin_Ice.Model
         #endregion
 
         #region Methods
-        public bool isTopCollision(Piece piece)
+        public bool IsTopCollision(Piece piece)
         {
             return YPosition - Game.BlockSize == piece.YPosition && XPosition == piece.XPosition;
         }
 
-        public bool isBottomCollision(Piece piece)
+        public bool IsBottomCollision(Piece piece)
         {
             return YPosition + Game.BlockSize == piece.YPosition && XPosition == piece.XPosition;
         }
 
-        public bool isLeftCollision(Piece piece)
+        public bool IsLeftCollision(Piece piece)
         {
             return XPosition - Game.BlockSize == piece.XPosition && YPosition == piece.YPosition;
         }
 
-        public bool isRightCollision(Piece piece)
+        public bool IsRightCollision(Piece piece)
         {
             return XPosition + Game.BlockSize == piece.XPosition && YPosition == piece.YPosition;
         }
 
-        public bool isInTheSamePlace(Piece piece)
+        public bool IsInTheSamePlace(Piece piece)
         {
             return YPosition == piece.YPosition && XPosition == piece.XPosition;
         }
-
 
         #endregion
     }

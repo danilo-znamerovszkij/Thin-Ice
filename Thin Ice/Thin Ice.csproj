@@ -66,8 +66,10 @@
     <Compile Include="Model\MeltedIce.cs" />
     <Compile Include="Model\MoneyBag.cs" />
     <Compile Include="Model\NextLevelDoor.cs" />
+    <Compile Include="Model\MovablePiece.cs" />
     <Compile Include="Model\Piece.cs" />
     <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\StateManager.cs" />
     <Compile Include="ViewModel\GameViewModel.cs" />
     <Compile Include="View\GameView.xaml.cs">
       <DependentUpon>GameView.xaml</DependentUpon>
@@ -129,6 +131,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\rip.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\start_screen.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\end_screen.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -13,10 +13,10 @@ namespace Thin_Ice.Model
             _xPosition = x;
             _yPosition = y;
 
-            setAppearance();
+            SetAppearance();
         }
 
-        private void setAppearance()
+        private void SetAppearance()
         {
             _image = new Uri("pack://application:,,,/Thin Ice;component/Resources/water.jpg");
         }
