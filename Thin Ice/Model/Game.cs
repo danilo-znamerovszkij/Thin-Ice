@@ -328,7 +328,6 @@ namespace Thin_Ice.Model
                     {
                         if (p.GetType() == type && Player.IsTopCollision(p))
                         {
-                            Console.WriteLine("This one is definetely is");
                             return true;
                         }
 
