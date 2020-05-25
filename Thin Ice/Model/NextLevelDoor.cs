@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Thin_Ice.Model
 {
-    class NextLevelDoor : Piece
+    class NextLevelDoor : CollectablePiece
     {
         public NextLevelDoor(int x, int y)
         {
@@ -20,5 +20,7 @@ namespace Thin_Ice.Model
         {
             _image = new Uri("pack://application:,,,/Thin Ice;component/Resources/finish_tile.png");
         }
+
+
     }
 }

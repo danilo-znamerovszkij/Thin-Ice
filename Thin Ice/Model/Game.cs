@@ -94,10 +94,6 @@ namespace Thin_Ice.Model
 
             CheckCollectableCollision();
 
-            CheckIfLevelComplete();
-
-            CheckIfLevelComplete();
-
             CheckIfPlayerStuck();
 
         }
@@ -176,54 +172,46 @@ namespace Thin_Ice.Model
             IsLevelLost = 0;
             RaisePropertyChanged("IsLevelLost");
         }
-        private bool CheckIfLevelComplete()
-        {
-
-            foreach (var p in Board)
-            {
-
-                if (p is NextLevelDoor && Player.IsInTheSamePlace(p))
-                {
-                    IsLevelCompleted = true;
-
-                    if (Score >= VictoryScore)
-                    {
-                        ToggleCongratsScreen();
-                        StateManager.CurrentState = IN_FINAL_SCREEN;
-                    }
-
-
-                    difficulty += 100;
-                    Level++;
-
-                    InitLevel(difficulty);
-
-                    RaisePropertyChanged("Level");
-                    RaisePropertyChanged("Score");
-                    RaisePropertyChanged("Board");
-
-                    return true;
-                }
-
-            }
-
-            return false;
-
-        }
+        
         private bool CheckCollectableCollision()
         {
 
             foreach (var p in Board)
             {
-                if (p is MoneyBag && Player.IsInTheSamePlace(p))
+                if (p is CollectablePiece)
                 {
-                    Board.Remove(p);
-                    Score += 100;
-                    RaisePropertyChanged("Score");
+                    if (p is NextLevelDoor && Player.IsInTheSamePlace(p))
+                    {
+                        IsLevelCompleted = true;
 
-                    return true;
+                        if (Score >= VictoryScore)
+                        {
+                            ToggleCongratsScreen();
+                            StateManager.CurrentState = IN_FINAL_SCREEN;
+                        }
+
+
+                        difficulty += 100;
+                        Level++;
+
+                        InitLevel(difficulty);
+
+                        RaisePropertyChanged("Level");
+                        RaisePropertyChanged("Score");
+                        RaisePropertyChanged("Board");
+
+                        return true;
+                    }
+
+                    if (p is MoneyBag && Player.IsInTheSamePlace(p))
+                    {
+                        Board.Remove(p);
+                        Score += 100;
+                        RaisePropertyChanged("Score");
+
+                        return true;
+                    }
                 }
-
             }
 
             return false;
@@ -327,7 +315,7 @@ namespace Thin_Ice.Model
                     foreach (var p in Board)
                     {
                         if (p.GetType() == type && Player.IsTopCollision(p))
-                        {
+                        {  
                             return true;
                         }
 

@@ -60,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="Common\KeyPressedCommand.cs" />
     <Compile Include="Common\Observer.cs" />
+    <Compile Include="Model\CollectablePiece.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="Model\IceBlock.cs" />
     <Compile Include="Model\IceFloor.cs" />

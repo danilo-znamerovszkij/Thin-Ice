@@ -31,3 +31,4 @@ C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.cspro
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.csproj.CopyComplete
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.exe
 C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.pdb
+C:\Users\Gebruiker\Documents\Thin-Ice\Thin-Ice\Thin Ice\obj\Debug\Thin Ice.csprojAssemblyReference.cache

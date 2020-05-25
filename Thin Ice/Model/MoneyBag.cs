@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Thin_Ice.Model
 {
-    internal class MoneyBag : Piece
+    internal class MoneyBag : CollectablePiece
     {
         public MoneyBag(int x, int y)
         {
@@ -20,5 +20,6 @@ namespace Thin_Ice.Model
         {
             _image = new Uri("pack://application:,,,/Thin Ice;component/Resources/money_bag.png");
         }
+
     }
 }
